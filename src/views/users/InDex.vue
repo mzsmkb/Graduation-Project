@@ -19,13 +19,21 @@
       </a-layout-header>
       <a-layout-content class="product-list">
         <a-row :gutter="[16, 16]">
-          <a-col :span="6" v-for="product in products" :key="product.id">
-            <a-card :cover="product.cover" :hoverable="true">
-              <a-card-meta :title="product.title" :description="product.description" />
-              <a-divider />
+<!--          <a-col :span="6" v-for="product in products" :key="product.id">-->
+<!--            <a-card :cover="product.cover" :hoverable="true">-->
+<!--              <img src="@/assets/imgs/2.jpg">-->
+<!--              <a-card-meta :title="product.title" :description="product.description" />-->
+<!--              <a-space>-->
+<!--                <a-text strong>¥{{product.price}}</a-text>-->
+<!--              </a-space>-->
+<!--            </a-card>-->
+<!--          </a-col>-->
+          <a-col :span="6" v-for="product in phoneList" :key="product.id">
+            <a-card :cover="product.id" :hoverable="true">
+              <img src="@/assets/imgs/2.jpg">
+              <a-card-meta :title="product.name" :description="product.description" />
               <a-space>
                 <a-text strong>¥{{product.price}}</a-text>
-                <a-button type="primary">加入购物车</a-button>
               </a-space>
             </a-card>
           </a-col>
@@ -37,7 +45,7 @@
 
 <script>
 import { Layout, Menu, MenuItem, Input, Row, Col, Card, Divider, Space, Button, Typography } from 'ant-design-vue';
-
+import axios from "axios";
 export default {
   name: 'App',
   components: {
@@ -113,13 +121,41 @@ export default {
           description: '这是商品4的描述',
           price: 399.00,
         },
-      ]
+      ],
+      phoneList:'',
     }
   },
   methods:{
     backToLogin(){
       this.$router.push({name:'login'})
-    }
+    },
+    getphoneList(){
+      console.log('正在获取数据库中的手机数据')
+      axios.get('http://localhost:3000/getphone')
+          .then(response => {
+            console.log("后端返回的数据",response);
+            this.phoneList = response.data.backResToFront
+            console.log("赋值给this.phoneList的数据",this.phoneList);
+          })
+          .catch(error => {
+            console.error('error',error.response)
+          });
+    },
+    getpadList(){
+      console.log('正在获取数据库中的平板数据')
+    },
+    getlaptopList(){
+      console.log('正在获取数据库中的平板数据')
+    },
+    getwearkitList(){
+      console.log('正在获取数据库中的穿戴数据')
+    },
+  },
+  created() {
+    this.getphoneList()
+    this.getpadList()
+    this.getlaptopList()
+    this.getwearkitList()
   }
 }
 </script>

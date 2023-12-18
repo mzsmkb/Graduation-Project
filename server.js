@@ -50,7 +50,21 @@ app.post('/login',(req,res)=>{
         })
 })
 
-
+app.get('/getphone',(req,res)=>{
+    console.log('进入到数据库中获取手机的数据')
+    connection.query(`select * from phone`,(err,result)=>{
+        if (err){
+            console.log('查询数据库失败',err,result);
+            res.status(500).send("Database query error");
+            return;
+        }
+        else {
+            console.log('拿到的数据是：',result)
+            res.status(201).send({backResToFront:result})
+            return;
+        }
+    })
+})
 
 app.listen(3000,()=>{
     console.log('Server is running on port 3000')
