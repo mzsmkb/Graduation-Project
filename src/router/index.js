@@ -1,6 +1,7 @@
 import {createRouter,createWebHistory} from "vue-router";
 import LogIn from "@/views/users/LogIn.vue";
 import InDex from '@/views/users/InDex.vue'
+import adminIndex from "@/views/admin/adminIndex.vue";
 
 const routes = [
     {
@@ -13,6 +14,12 @@ const routes = [
         path:'/',
         name:'index',
         component:InDex,
+        prps:true,
+    },
+    {
+        path:'/admin',
+        name:'admin',
+        component:adminIndex,
         prps:true,
     },
 ]

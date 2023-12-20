@@ -163,7 +163,7 @@ export default {
 <style scoped>
 .app {
   height: 100vh;
-  width: 1100px;
+  width: 86vw;
 }
 
 .nav-bar {
