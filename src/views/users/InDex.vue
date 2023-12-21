@@ -21,7 +21,7 @@
         <a-row :gutter="[16, 16]">
           <a-col :span="6" v-for="product in phoneList" :key="product.id">
             <a-card :cover="product.id" :hoverable="true">
-              <img src="@/assets/imgs/2.jpg">
+              <img :src="product.imgurl" style="width: 100%;height: 100%" alt="">
               <a-card-meta :title="product.name" :description="product.description" />
               <a-space>
                 <a-text strong>¥{{product.price}}</a-text>
@@ -123,7 +123,10 @@ export default {
       ],
       phoneList:'',
 
-      fill:null
+      fill:null,
+      filename:'',
+      fileUrl:'',
+      imgUrl:'uploads/image-1703131291485-897933556.png'
     }
   },
   methods:{
