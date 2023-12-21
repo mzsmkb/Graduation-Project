@@ -33,27 +33,11 @@
     </a-layout>
 
 
-    <a-upload
-      name="imgFile"
-      v-model:file-list="fileList"
-      action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-      :multiple="true"
-      :show-upload-list="false"
-      :before-upload="beforeUpload"
-      :custom-request="customRequest"
-      list-type="picture-card"
-      @preview="handlePreview"
-    >
-      <!--      @change="handleUpload"-->
-<!--      <button>上传图片</button>-->
-      <div>
-        <div style="margin-top: 8px">Upload</div>
-      </div>
-    </a-upload>
-
-    <a-modal :open="previewVisible" :title="previewTitle" :footer="null" @cancel="handleCancel">
-      <img :src="previewImg" style="width: 100%" alt="example">
-    </a-modal>
+<!--    图片上传-->
+    <div>
+      <input type="file" ref="fileInput" @change="handleFileChange"/>
+      <button @click="uploadImage">图片上传</button>
+    </div>
 
   </div>
 </template>
@@ -139,18 +123,13 @@ export default {
       ],
       phoneList:'',
 
-    //   上传图片并预览
-      fileList:[],
-      previewVisible:false,
-      previewImg:'',
-      previewTitle:'',
+      fill:null
     }
   },
   methods:{
     backToLogin(){
       this.$router.push({name:'login'})
     },
-
     // 获取到数据库中的商品信息
     getphoneList(){
       console.log('正在获取数据库中的手机数据')
@@ -174,45 +153,22 @@ export default {
       console.log('正在获取数据库中的穿戴数据')
     },
 
-    // 上传文件方法
-    handleUpload(info){
-      console.log("lllllllllllllllllll",info)
-      const {status,response} = info.file;
-      if (status === 'done'){
-        this.fileList = [info.file];
-        this.previewImg = response.url;
-        this.previewVisible = true;
-      }
+  //   上传图片
+    handleFileChange(event){
+      this.file = event.target.files[0];
     },
-    beforeUpload(info){
-      console.log("这是beforeUpload的info：",info)
-    },
-    customRequest(info,date){
-      console.log("这是customRequest的info和date：",info,date)
-    },
-    getBase64(file){
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-      });
+    uploadImage(){
+      const formData = new FormData();
+      formData.append('image',this.file);
+
+      axios.post('http://localhost:3000/upload',formData)
+          .then(response=>{
+            console.log('上传成功：',response.data)
+          })
+          .catch(error=>{
+            console.error('上传失败',error)
+          })
     }
-    ,
-    async handlePreview(file) {
-      console.log("这是handlePreview的file：", file)
-      if (!file.url && !file.preview) {
-        file.preview = await getBase64(file.originFileObj);
-      }
-      previewImage.value = file.url || file.preview;
-      previewVisible.value = true;
-      previewTitle.value = file.name || file.url.substring(file.url.lastIndexOf('/') + 1);
-    },
-    handleCancel(){
-      console.log("这是handleCancel")
-      previewVisible.value = false;
-      previewTitle.value = '';
-    },
   },
   created() {
     this.getphoneList()

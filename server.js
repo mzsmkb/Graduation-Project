@@ -3,7 +3,11 @@ const bodyParser = require('body-parser')
 const mysql = require('mysql2')
 const fs = require('fs')
 const cors = require('cors')
+
+const multer = require('multer')
 const app = express()
+const upload = multer({dest:'uploads/'})
+
 
 app.use(cors())
 app.use(bodyParser.json())
@@ -26,6 +30,30 @@ connection.connect(err => {
 
     console.log('Connected ro database')
 })
+
+
+// 处理图片上传
+app.post('/upload',upload.single('image'),(req,res)=>{
+    try {
+        const file = req.file;
+        console.log('req.file',req.file)
+        const query = 'insert into products (image) values (?)';
+        const values = file.filename
+        connection.query(query,values,(error,results)=>{
+          if (error){
+              console.error(error);
+              res.status(500).json({status:'failure~~'});
+          }  else {
+              res.json({status:'success!'})
+          }
+        })
+    } catch(error) {
+        console.error(error);
+        res.status(500).json({status:'failure!!'})
+    }
+})
+
+
 
 app.post('/login',(req,res)=>{
     console.log('点击了登录按钮，进入了后端接口处')
@@ -54,12 +82,12 @@ app.get('/getphone',(req,res)=>{
     console.log('进入到数据库中获取手机的数据')
     connection.query(`select * from phone`,(err,result)=>{
         if (err){
-            console.log('查询数据库失败',err,result);
+            // console.log('查询数据库失败',err,result);
             res.status(500).send("Database query error");
             return;
         }
         else {
-            console.log('拿到的数据是：',result)
+            // console.log('拿到的数据是：',result)
             res.status(201).send({backResToFront:result})
             return;
         }
