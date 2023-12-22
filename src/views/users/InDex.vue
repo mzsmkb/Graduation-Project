@@ -21,7 +21,7 @@
         <a-row :gutter="[16, 16]">
           <a-col :span="6" v-for="product in phoneList" :key="product.id">
             <a-card :cover="product.id" :hoverable="true">
-              <img :src="product.imgurl" style="width: 100%;height: 100%" alt="">
+<!--              <img :src="product.imgurl" style="width: 100%;height: 100%" alt="">-->
               <a-card-meta :title="product.name" :description="product.description" />
               <a-space>
                 <a-text strong>¥{{product.price}}</a-text>
@@ -33,18 +33,13 @@
     </a-layout>
 
 
-<!--    图片上传-->
-    <div>
-      <input type="file" ref="fileInput" @change="handleFileChange"/>
-      <button @click="uploadImage">图片上传</button>
-    </div>
-
   </div>
 </template>
 
 <script>
 import { Layout, Menu, MenuItem, Input, Row, Col, Card, Divider, Space, Button, Typography } from 'ant-design-vue';
 import axios from "axios";
+
 export default {
   name: 'App',
   components: {
@@ -122,11 +117,6 @@ export default {
         },
       ],
       phoneList:'',
-
-      fill:null,
-      filename:'',
-      fileUrl:'',
-      imgUrl:'uploads/image-1703131291485-897933556.png'
     }
   },
   methods:{
@@ -155,23 +145,6 @@ export default {
     getwearkitList(){
       console.log('正在获取数据库中的穿戴数据')
     },
-
-  //   上传图片
-    handleFileChange(event){
-      this.file = event.target.files[0];
-    },
-    uploadImage(){
-      const formData = new FormData();
-      formData.append('image',this.file);
-
-      axios.post('http://localhost:3000/upload',formData)
-          .then(response=>{
-            console.log('上传成功：',response.data)
-          })
-          .catch(error=>{
-            console.error('上传失败',error)
-          })
-    }
   },
   created() {
     this.getphoneList()

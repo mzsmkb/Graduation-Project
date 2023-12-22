@@ -1,23 +1,8 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const mysql = require('mysql2')
-const fs = require('fs')
 const cors = require('cors')
-
-const multer = require('multer')
 const app = express()
-
-const storage = multer.diskStorage({
-    destination:function (req,file,cb){
-        cb(null,'uploads/');
-    },
-    filename:function (req,file,cb){
-        const uniqueSuffix = Date.now()+'-'+Math.round(Math.random()*1e9);
-        cb(null,file.fieldname+'-'+uniqueSuffix + '.png')
-    }
-})
-
-const upload = multer({storage:storage})
 
 app.use(cors())
 app.use(bodyParser.json())
@@ -39,28 +24,6 @@ connection.connect(err => {
     }
 
     console.log('Connected ro database')
-})
-
-
-// 处理图片上传
-app.post('/upload',upload.single('image'),(req,res)=>{
-    try {
-        const file = req.file;
-        console.log('req.file',req.file.path)
-        const query = 'insert into phone (imgurl) values (?)';
-        const values = file.filename
-        connection.query(query,values,(error,results)=>{
-          if (error){
-              console.error(error);
-              res.status(500).json({status:'failure~~'});
-          }  else {
-              res.json({status:'success!',filename:values})
-          }
-        })
-    } catch(error) {
-        console.error(error);
-        res.status(500).json({status:'failure!!'})
-    }
 })
 
 
