@@ -1,8 +1,11 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const mysql = require('mysql2')
+const multer = require('multer')
 const cors = require('cors')
+// const {error} = require("@babel/eslint-parser/lib/convert");
 const app = express()
+const upload = multer({ dest: 'uploads/' })
 
 app.use(cors())
 app.use(bodyParser.json())
@@ -15,7 +18,6 @@ const connection = mysql.createConnection({
     database:'ecommerce',
     port:'3306'
 })
-
 // 连接mysql数据库
 connection.connect(err => {
     if(err){
@@ -26,7 +28,25 @@ connection.connect(err => {
     console.log('Connected ro database')
 })
 
-
+app.post('/upload',upload.single('image'),(req,res)=>{
+    try{
+        const file = req.file
+        console.log('req.file',req.file)
+        const query = 'insert into phone (imgurl) values (?)'
+        const values = file.filename
+        connection.query(query,values,(error,results)=>{
+            if(error){
+                // console.error(error)
+                res.status(500).json({status:'falure~~'})
+            }else {
+                res.json({status:'success!!!',filename:values})
+            }
+        })
+    }catch (error){
+        // console.error(error)
+        res.status(500).json({status:'failure~~!!'})
+    }
+})
 
 app.post('/login',(req,res)=>{
     console.log('点击了登录按钮，进入了后端接口处')
@@ -50,7 +70,6 @@ app.post('/login',(req,res)=>{
         }
         })
 })
-
 app.get('/getphone',(req,res)=>{
     console.log('进入到数据库中获取手机的数据')
     connection.query(`select * from phone`,(err,result)=>{
@@ -66,7 +85,6 @@ app.get('/getphone',(req,res)=>{
         }
     })
 })
-
 app.listen(3000,()=>{
     console.log('Server is running on port 3000')
 })

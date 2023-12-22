@@ -32,6 +32,10 @@
       </a-layout-content>
     </a-layout>
 
+    <div class="upload_file">
+      <input type='file' ref="fileInput" @change="uploadFile">
+    </div>
+
 
   </div>
 </template>
@@ -145,6 +149,23 @@ export default {
     getwearkitList(){
       console.log('正在获取数据库中的穿戴数据')
     },
+
+    uploadFile(){
+      const file = this.$refs.fileInput.files[0]
+      const formData = new FormData()
+      formData.append('image',file)
+      axios.post('http://localhost:3000/upload',formData,{
+        headers:{
+          'Content-Type':'multipart/form-data'
+        }
+      })
+          .then(res=>{
+            console.log(res.data)
+          })
+          .catch(err=>{
+            console.error(err)
+          })
+    }
   },
   created() {
     this.getphoneList()
