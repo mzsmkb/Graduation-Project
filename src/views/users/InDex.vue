@@ -21,7 +21,7 @@
         <a-row :gutter="[16, 16]">
           <a-col :span="6" v-for="product in phoneList" :key="product.id">
             <a-card :cover="product.id" :hoverable="true">
-<!--              <img :src="product.imgurl" style="width: 100%;height: 100%" alt="">-->
+              <img src="http://localhost:3000/upload/c2590c97e2d2160d983607cd5de0675d" style="width: 100%;height: 100%" alt="">
               <a-card-meta :title="product.name" :description="product.description" />
               <a-space>
                 <a-text strong>¥{{product.price}}</a-text>
@@ -34,6 +34,11 @@
 
     <div class="upload_file">
       <input type='file' ref="fileInput" @change="uploadFile">
+    </div>
+
+
+    <div class="showImg">
+      <img :src="imageUrl"/>
     </div>
 
 
@@ -121,6 +126,8 @@ export default {
         },
       ],
       phoneList:'',
+
+      imageUrl:''
     }
   },
   methods:{
@@ -172,6 +179,16 @@ export default {
     this.getpadList()
     this.getlaptopList()
     this.getwearkitList()
+  },
+  mounted() {
+    axios.get('http://localhost:3000/images')
+        .then(res=>{
+          console.log(res.data)
+          this.imageUrl = res.data[0].url
+        })
+        .catch(err=>{
+          console.error(err)
+        })
   }
 }
 </script>

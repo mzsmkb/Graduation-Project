@@ -33,7 +33,7 @@ app.post('/upload',upload.single('image'),(req,res)=>{
         const file = req.file
         console.log('req.file',req.file)
         const query = 'insert into phone (imgurl) values (?)'
-        const values = file.filename
+        const values = file.originalname
         connection.query(query,values,(error,results)=>{
             if(error){
                 // console.error(error)
@@ -48,6 +48,17 @@ app.post('/upload',upload.single('image'),(req,res)=>{
     }
 })
 
+app.get('/images',(req,res)=>{
+    const query = `select imgurl from phone`
+    connection.query(query,(error,result)=>{
+        if(error){
+            console.error(error)
+            res.status(500).json({status:'failure~~'})
+        }else {
+            res.json(result)
+        }
+    })
+})
 app.post('/login',(req,res)=>{
     console.log('点击了登录按钮，进入了后端接口处')
     const inputLoginInfo = req.body
