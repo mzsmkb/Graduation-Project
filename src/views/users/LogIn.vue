@@ -6,9 +6,12 @@
         <h1>Welcome</h1>
         <input type="text" class="input_msg" v-model="loginInfo.username" placeholder="输入用户名">
         <input type="password" class="input_msg" v-model="loginInfo.password" placeholder="输入密码">
-        <a v-if="showPwdErr" style="color: red;">用户或密码错误!</a>
-        <a @click="toReg" class="forpwd">Forget the passrword?</a>
+        <div class="error">
+          <a v-if="showPwdErr" style="color: red;">用户名或密码错误!</a>
+        </div>
+        <a @click="toRePassword" class="forpwd">Forget the passrword?</a>
         <a @click="Login" class="login">登录</a>
+        <button @click="toRegisterUrl">注册</button>
       </div>
     </div>
   </div>
@@ -43,19 +46,26 @@ export default {
                     this.showPwdErr = true
             });
 
-        }
+        },
+      toRePassword(){
+          this.$router.push({name:'passwordReset'})
+      },
+      toRegisterUrl(){
+          this.$router.push({name:'register'})
+      }
+
     },
 }
 
 </script>
 
-<style>
-body{
-    background-image: linear-gradient(to left, #8171ef, #5cbaef);
-    display:flex;
-    justify-content:center;
-}
-</style>
+<!--<style>-->
+<!--body{-->
+<!--    background-image: linear-gradient(to left, #8171ef, #5cbaef);-->
+<!--    display:flex;-->
+<!--    justify-content:center;-->
+<!--}-->
+<!--</style>-->
 
 <style scoped>
 .login_register {
@@ -65,6 +75,7 @@ body{
     height: 550px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, .8);
     display: flex;
+    margin: 20px 200px;
 }
 
 .back_img {

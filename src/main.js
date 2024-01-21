@@ -7,5 +7,9 @@ import Antd from 'ant-design-vue'
 import  { version } from 'ant-design-vue'
 console.log('ant-design-vue version:', version)
 import 'ant-design-vue/dist/reset.css'
+import Vuex from'vuex'
 
-createApp(App).use(Antd).use(router).mount('#app')
+
+
+
+createApp(App).use(Antd).use(router).use(Vuex).mount('#app')
