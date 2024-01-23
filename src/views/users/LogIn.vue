@@ -39,13 +39,13 @@ export default {
                 .then(response => {
                     console.log("后端返回的数据",response.data.inputLoginInfo);
                     this.showPwdErr = false
-                    this.$router.push({ name: 'index' });
+                    // 通过query参数传递用户名到目标页面
+                    this.$router.push({ name: 'index', query: { username: this.loginInfo.username }});
                 })
                 .catch(error => {
                     console.error('error',error.response.data)
                     this.showPwdErr = true
             });
-
         },
       toRePassword(){
           this.$router.push({name:'passwordReset'})

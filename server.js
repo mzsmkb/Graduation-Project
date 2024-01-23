@@ -89,7 +89,6 @@ const transporter = nodemailer.createTransport({
         pass: 'ntbfnmpsoppoechi' // 你的QQ邮箱授权码
     }
 });
-
 // 发送包含验证码的电子邮件
 app.post('/resetPassword/sendEmail', (req, res) => {
     const loginInfo = req.body
@@ -116,6 +115,35 @@ app.post('/resetPassword/sendEmail', (req, res) => {
     });
 });
 
+
+// 04 获取当前登录用户的信息
+app.post('/getuserinfo',(req,res) => {
+
+    const username = req.body.username; // 从请求中获取要查询的用户名
+    console.log("正在进入后端数据库拿取登录用户信息",username)
+    // 查询用户信息
+    const query = "SELECT * FROM users WHERE username = ?";
+    connection.query(query, [username], (error, results, fields) => {
+        if (error) throw error;
+        console.log('User information: ', results[0]); // 输出用户信息
+        res.send(results[0]); // 将用户信息发送回前端
+    });
+})
+
+
+// 05修改用户个人数据
+app.post('/editUserInfo',(req,res)=>{
+    const editUserInfo = req.body; // 从请求中获取新的用户信息
+    console.log("222",editUserInfo)
+
+    // 更新用户信息
+    const query = "UPDATE users SET phone = ?, email = ? WHERE username = ?";
+    connection.query(query, [editUserInfo.phone, editUserInfo.email, editUserInfo.username], (error, results, fields) => {
+        if (error) throw error;
+        console.log('User information updated'); // 输出更新成功信息
+        res.send('User information updated'); // 将更新成功信息发送回前端
+    });
+})
 
 
 // 获取商品接口：首页手机

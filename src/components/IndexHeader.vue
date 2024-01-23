@@ -11,7 +11,8 @@
         <a href="#">购物车</a>
         <router-link to="/login">登录</router-link>
         <router-link to="/login">注册</router-link>
-        <router-link to="/userInfo" class="avatar"></router-link>
+        你好，{{username}}
+        <a @click="toUserInfoView" class="avatar"></a>
       </div>
     </nav>
   </div>
@@ -21,8 +22,8 @@
 export default{
   name:"IndexHeader",
   components:{
-
   },
+  props:['username'],
   data(){
 
   },
@@ -38,6 +39,10 @@ export default{
 
       // 弹窗提示
       alert("网址已复制到剪贴板！");
+    },
+    toUserInfoView(){
+      console.log("正在进入个人信息中心")
+      this.$router.push({ name: 'userInfo', query: { username:this.username }});
     }
   }
 }

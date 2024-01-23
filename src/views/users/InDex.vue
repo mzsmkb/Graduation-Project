@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <header>
-      <index-header></index-header>
+      <index-header :username="username"></index-header>
     </header>
     <main>
       这是详情栏
@@ -19,7 +19,15 @@ export default {
   components:{
     IndexHeader
   },
+  data(){
+    return {
+      username:'',
+    }
+  },
   methods: {
+  },
+  mounted() {
+    this.username = this.$route.query.username; // 从$route中获取传递过来的username
   }
 }
 </script>
